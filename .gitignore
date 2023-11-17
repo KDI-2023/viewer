@@ -21,3 +21,5 @@ __pycache__/
 archive/
 */temp/
 tempCodeRunnerFile.cpp
+
+*.log
