@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .link {
+        fill: none;
+        stroke: #666;
+        stroke-width: 1.5px;
+    }
+
+    #licensing {
+        fill: green;
+    }
+
+    .link.licensing {
+        stroke: green;
+    }
+
+    .link.resolved {
+        stroke-dasharray: 0, 2 1;
+    }
+
+    circle {
+        fill: #ccc;
+        stroke: #333;
+        stroke-width: 1.5px;
+    }
+
+    text {
+        font: 12px Microsoft YaHei;
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    }
+
+    .linetext {
+        font-size: 12px Microsoft YaHei;
+    }
+</style>
+<body>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script>
+
+        var links =
+            [
+                { source: '某科学的超电磁炮', target: '亲船素甘', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '结标淡希', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '薄绢休味', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '雪莉·克伦威尔', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '神裂火织', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '土御门舞夏', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '麦野沉利', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '青星铃兰', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '上条当麻', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '多莉', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂10031号', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '上条诗菜', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '樱坂风雅', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '云川鞠亚', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '誉望万化', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '泷壶理后', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '芙兰达·塞维伦', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '固法美伟', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '硲舍佳茄', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '口囃子早鸟', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '鳄河雷斧', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '冥土追魂', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '初春饰利', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂9982号', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '警策看取', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '木原圆周', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '黄泉川爱穗', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '木山春生', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '有富春树', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '姬神秋沙', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '大姐头', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '泰瑞丝缇娜·木原·莱夫雷恩', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '相园美央', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '重福省帆', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '吹寄制理', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '舍监', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '云川芹亚', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '五和', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '美山写影', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '削板军霸', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '木原脑干', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '柊元响季', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '一方通行', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '托尔', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂10032', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '前方之风', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '食蜂操祈', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '婚后光子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '菲布莉', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '北条彩铃', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '枝先绊理', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '龙神乙姬', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂美琴', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '布束砥信', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '春上衿衣', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '木原那由他', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂妹妹', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '白井黑子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '黑妻绵流', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂美铃', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '操齿凉子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '铁装缀里', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '弓箭猎虎', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂10777号', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '茵蒂克丝', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '泡浮万彬', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '切斑芽美', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '铃科百合子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '明美', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '咲莲诱璃', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '马场芳郎', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '风斩冰华', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '柳迫碧美', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '奥索拉·阿奎纳', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '真子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '萝拉·斯图亚特', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '最后之作', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '番外个体', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '湾内绢保', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '月咏小萌', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '查乐', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '小睦', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '御坂19090号', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '牧上小牧', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '绢旗最爱', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '木原病理', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '帆风润子', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '小佐古俊一', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '蓝发耳环', type: 'resolved', 'rela': '角色' },
+                { source: '某科学的超电磁炮', target: '佐天泪子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '亲船素甘', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '莎特奥拉·塞奎恩齐亚', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '作乐木鸣叶', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '人皮挟美', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '上里翔流', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '结标淡希', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '微细乙爱', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '海原光贵', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '薄绢休味', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '雪莉·克伦威尔', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '神裂火织', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '狱彩雨空', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '土御门舞夏', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '麦野沉利', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '史提尔·马格努斯', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '博士', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '欧提努斯', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '青星铃兰', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '艾札力', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '上条当麻', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '多莉', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂10031号', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '上条诗菜', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '云川鞠亚', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '斯芬克斯', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '誉望万化', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '樱坂风雅', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '清之太郎丸', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '滨面仕上', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '泷壶理后', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '欧莉安娜·汤姆森', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '上条刀夜', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '砂皿致密', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '左方之地', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '药丸医月', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '芙兰达·塞维伦', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '固法美伟', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '蕾薇妮雅·柏德蔚', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '米娜·马瑟斯', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '硲舍佳茄', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '口囃子早鸟', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '鳄河雷斧', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '凯茨·诺克雷文', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '冥土追魂', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '初春饰利', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂9982号', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '警策看取', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '木原圆周', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '黄泉川爱穗', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '木山春生', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '有富春树', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '菱形干比古', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '姬神秋沙', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '大姐头', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '泰瑞丝缇娜·木原·莱夫雷恩', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '相园美央', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '埃斯特尔·罗森塔尔', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '重福省帆', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '吹寄制理', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '舍监', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '云川芹亚', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '雷蒂丽·达古露萝德', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '五和', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '削板军霸', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '美山写影', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '逆源质拼图545', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '木原脑干', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '柊元响季', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '一方通行', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '托尔', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂10032', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '蓝花悦', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '莉莉丝·克劳利', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '前方之风', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '食蜂操祈', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '婚后光子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '狗·德川家康·薛定谔', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '菲布莉', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '北条彩铃', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '饭栖丽塔', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '雅妮丝·桑提斯', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '枝先绊理', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '龙神乙姬', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '舞殿星见', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂美琴', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '布束砥信', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '春上衿衣', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '右方之火', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '木原那由他', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂妹妹', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '白井黑子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '蕾莎', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '露琪亚', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '黑妻绵流', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂美铃', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '操齿凉子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '狱彩海美', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '铁装缀里', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '亚雷斯塔·克劳利', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '弓箭猎虎', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂10777号', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '茵蒂克丝', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '泡浮万彬', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '总体意识', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '切斑芽美', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '铃科百合子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '咲莲诱璃', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '明美', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '菱形蛭魅', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '马场芳郎', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '风斩冰华', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '柳迫碧美', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '乌丸府兰', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '雅王院司', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '奥索拉·阿奎纳', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '真子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '狱彩陆莉', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '迪翁·福春', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '安洁莉娜', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '萝拉·斯图亚特', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '最后之作', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '番外个体', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '芙蕾梅亚·塞维伦', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '湾内绢保', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '化生院明日香', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '垣根帝督', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '月咏小萌', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '查乐', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '小睦', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '御坂19090号', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '兰西丝', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '莎夏·克洛伊洁芙', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '牧上小牧', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '绢旗最爱', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '木原病理', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '帆风润子', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '土御门元春', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '小佐古俊一', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '蓝发耳环', type: 'resolved', 'rela': '角色' },
+                { source: '魔法禁书目录', target: '佐天泪子', type: 'resolved', 'rela': '角色' },
+            ];
+
+        var nodes = {};
+
+        links.forEach(function (link) {
+            link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
+            link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+        });
+
+        var width = 1920, height = 1080;
+
+        var force = d3.layout.force()
+            .nodes(d3.values(nodes))
+            .links(links)
+            .size([width, height])
+            .linkDistance(180)
+            .charge(-1500)
+            .on("tick", tick)
+            .start();
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var marker =
+            svg.append("marker")
+                .attr("id", "resolved")
+                .attr("markerUnits", "userSpaceOnUse")
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 32)
+                .attr("refY", -1)
+                .attr("markerWidth", 12)
+                .attr("markerHeight", 12)
+                .attr("orient", "auto")
+                .attr("stroke-width", 2)
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .attr('fill', '#000000');
+
+        var edges_line = svg.selectAll(".edgepath")
+            .data(force.links())
+            .enter()
+            .append("path")
+            .attr({
+                'd': function (d) { return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y },
+                'class': 'edgepath',
+                'id': function (d, i) { return 'edgepath' + i; }
+            })
+            .style("stroke", function (d) {
+                var lineColor;
+                lineColor = "#B43232";
+                return lineColor;
+            })
+            .style("pointer-events", "none")
+            .style("stroke-width", 0.5)
+            .attr("marker-end", "url(#resolved)");
+
+        var edges_text = svg.append("g").selectAll(".edgelabel")
+            .data(force.links())
+            .enter()
+            .append("text")
+            .style("pointer-events", "none")
+            .attr({
+                'class': 'edgelabel',
+                'id': function (d, i) { return 'edgepath' + i; },
+                'dx': 80,
+                'dy': 0
+            });
+
+        edges_text.append('textPath')
+            .attr('xlink:href', function (d, i) { return '#edgepath' + i })
+            .style("pointer-events", "none")
+            .text(function (d) { return d.rela; });
+
+        var circle = svg.append("g").selectAll("circle")
+            .data(force.nodes())
+            .enter().append("circle")
+            .style("fill", function (node) {
+                var color;
+                var link = links[node.index];
+                color = "#F9EBF9";
+                return color;
+            })
+            .style('stroke', function (node) {
+                var color;
+                var link = links[node.index];
+                color = "#A254A2";
+                return color;
+            })
+            .attr("r", 28)
+            .on("click", function (node) {
+                edges_line.style("stroke-width", function (line) {
+                    console.log(line);
+                    if (line.source.name == node.name || line.target.name == node.name) {
+                        return 4;
+                    } else {
+                        return 0.5;
+                    }
+                });
+            })
+            .call(force.drag);
+
+        var text = svg.append("g").selectAll("text")
+            .data(force.nodes())
+            .enter()
+            .append("text")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .style('fill', function (node) {
+                var color;
+                var link = links[node.index];
+                color = "#A254A2";
+                return color;
+            }).attr('x', function (d) {
+                var re_en = /[a-zA-Z]+/g;
+                if (d.name.match(re_en)) {
+                    d3.select(this).append('tspan')
+                        .attr('x', 0)
+                        .attr('y', 2)
+                        .text(function () { return d.name; });
+                }
+
+                else if (d.name.length <= 4) {
+                    d3.select(this).append('tspan')
+                        .attr('x', 0)
+                        .attr('y', 2)
+                        .text(function () { return d.name; });
+                } else {
+                    var top = d.name.substring(0, 4);
+                    var bot = d.name.substring(4, d.name.length);
+
+                    d3.select(this).text(function () { return ''; });
+
+                    d3.select(this).append('tspan')
+                        .attr('x', 0)
+                        .attr('y', -7)
+                        .text(function () { return top; });
+
+                    d3.select(this).append('tspan')
+                        .attr('x', 0)
+                        .attr('y', 10)
+                        .text(function () { return bot; });
+                }
+            });
+
+        function tick() {
+            circle.attr("transform", transform1);
+            text.attr("transform", transform2);
+
+            edges_line.attr('d', function (d) {
+                var path = 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+                return path;
+            });
+
+            edges_text.attr('transform', function (d, i) {
+                if (d.target.x < d.source.x) {
+                    bbox = this.getBBox();
+                    rx = bbox.x + bbox.width / 2;
+                    ry = bbox.y + bbox.height / 2;
+                    return 'rotate(180 ' + rx + ' ' + ry + ')';
+                }
+                else {
+                    return 'rotate(0)';
+                }
+            });
+        }
+
+        function linkArc(d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y
+        }
+
+        function transform1(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        }
+        function transform2(d) {
+            return "translate(" + (d.x) + "," + d.y + ")";
+        }
+
+    </script>
